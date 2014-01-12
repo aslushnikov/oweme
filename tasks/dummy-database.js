@@ -2,7 +2,6 @@ var orm = require("orm");
 var Q = require("q");
 var database = require("../lib/database.js")
 
-
 var Server = {};
 
 module.exports = function()
@@ -19,10 +18,6 @@ module.exports = function()
     .then(ensureDummyUsers)
     .then(function(users) {
         Server.users = users;
-    })
-    .then(ensureDummyCards)
-    .then(function(cards) {
-        Server.cards = cards;
     })
     .then(ensureDummyLoans)
     .then(function() {
@@ -94,31 +89,21 @@ function ensureDummyUsers()
     ]);
 }
 
-function ensureDummyCards()
+function ensureDummyLoans()
 {
-    console.log("ensuring dummy cards...");
     var rubleCurrency = null;
     for (var i = 0; i < Server.currencies.length; ++i) {
         if (Server.currencies[i].name === "ruble")
             rubleCurrency = Server.currencies[i];
     }
     if (!rubleCurrency) throw new Error("Did not find ruble currency");
-    return ensureDummyData(Server.db.models.card, [
+    return ensureDummyData(Server.db.models.loan, [
         {
             value: 300,
             comment: "Hookah",
-            creationDate: new Date(),
             currency: rubleCurrency,
-        },
-    ]);
-}
-
-function ensureDummyLoans()
-{
-    return ensureDummyData(Server.db.models.loan, [
-        {
             creationDate: new Date(),
-            details: Server.cards[0],
+            active: true,
             lender: Server.users[0],
             debtor: Server.users[1],
         },

@@ -3,6 +3,18 @@ extends layout
 block content
   h1= title
   p Welcome to oWeMe!
-  p User: #{user.firstName} #{user.lastName} - #{user.email}
-  p
-    a(href="/logout") Logout
+  p User: #{user.firstName} #{user.lastName} - #{user.email} 
+    a(href="/logout") Not you?
+  h2 Loans:
+  ul
+    each val in userLoans
+      li= val.value + " to " + val.debtor.email + " for " + val.comment + " "
+        a(href="/loan/resolve/#{val.id}") Resolve
+  h2 Debts:
+  ul
+    each val in userDebts
+      li= val.value + " to " + val.debtor.email + " for " + val.comment + " "
+  h2 History:
+  ul
+    each val in userHistory
+      li= val.value + " to " + val.debtor.email + " for " + val.comment + " "

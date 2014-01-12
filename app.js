@@ -5,27 +5,13 @@
 var express = require('express')
   , http = require('http')
   , path = require('path')
-  , config = require('./lib/config.js')
   , Q = require("q")
   , database = require("./lib/database.js")
 
 database.connect()
-.then(setUpServer.bind(this, config))
+.then(setUpServer)
 
-function loadDatabaseModels(db)
-{
-    var deferred = Q.defer();
-    db.load("./lib/models", function(err) {
-        if (err) return deferred.reject(err);
-        db.sync(function(err) {
-            if (err) return deferred.reject(err);
-            deferred.resolve(db);
-        });
-    });
-    return deferred.promise;
-}
-
-function setUpServer(config, database)
+function setUpServer(database)
 {
     var app = express();
     // all environments
@@ -45,7 +31,7 @@ function setUpServer(config, database)
         },
     }));
     // setting up authentication middleware
-    require("./lib/auth")(app, database, config);
+    require("./lib/auth")(app, database);
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
 
@@ -55,7 +41,7 @@ function setUpServer(config, database)
     }
 
     // setting up all routes
-    require("./lib/routes")(app, config, database);
+    require("./lib/routes")(app, database);
 
     http.createServer(app).listen(app.get('port'), function(){
         console.log('Express server listening on port ' + app.get('port'));

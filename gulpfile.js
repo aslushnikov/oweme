@@ -13,3 +13,7 @@ gulp.task("clear-database", function() {
     var clearDatabase = require("./tasks/clear-database.js");
     return clearDatabase();
 });
+
+gulp.task("reset-database", ["clear-database"], function() {
+    gulp.run("dummy-database");
+});
