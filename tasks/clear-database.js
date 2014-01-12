@@ -1,32 +1,15 @@
-var orm = require("orm");
-var Q = require("q");
-var config = require("../lib/config.js");
-
-var connect = Q.denodeify(orm.connect.bind(orm));
+var orm = require("orm")
+  , Q = require("q")
+  , database = require("../lib/database.js")
 
 module.exports = function()
 {
-    return connect(config.database)
-    .then(loadModels)
+    return database.connect()
     // ensuring DB has some dummy entries
     .then(dropModels)
     .fail(function(err) {
         throw err;
     });
-}
-
-function loadModels(db)
-{
-    var deferred = Q.defer();
-    db.load("../lib/models", function(err) {
-        if (err) return deferred.reject(err);
-
-        db.sync(function(err) {
-            if (err) return deferred.reject(err);
-            deferred.resolve(db);
-        });
-    });
-    return deferred.promise;
 }
 
 function dropModels(db)

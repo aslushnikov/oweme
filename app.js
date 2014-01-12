@@ -7,12 +7,9 @@ var express = require('express')
   , path = require('path')
   , config = require('./lib/config.js')
   , Q = require("q")
-  , orm = require("orm")
+  , database = require("./lib/database.js")
 
-var connect = Q.denodeify(orm.connect.bind(orm));
-
-connect(config.database)
-.then(loadDatabaseModels)
+database.connect()
 .then(setUpServer.bind(this, config))
 
 function loadDatabaseModels(db)

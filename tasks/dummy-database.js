@@ -1,18 +1,16 @@
 var orm = require("orm");
 var Q = require("q");
-var config = require("../lib/config.js");
+var database = require("../lib/database.js")
 
-var connect = Q.denodeify(orm.connect.bind(orm));
 
 var Server = {};
 
 module.exports = function()
 {
-    return connect(config.database)
+    return database.connect()
     .then(function(db) {
         Server.db = db;
     })
-    .then(loadModels)
     // ensuring DB has some dummy entries
     .then(ensureDummyCurrencies)
     .then(function(currencies) {
@@ -36,20 +34,6 @@ module.exports = function()
     .fail(function(err) {
         throw err;
     });
-}
-
-function loadModels()
-{
-    var deferred = Q.defer();
-    Server.db.load("../lib/models", function(err) {
-        if (err) return deferred.reject(err);
-
-        Server.db.sync(function(err) {
-            if (err) return deferred.reject(err);
-            deferred.resolve();
-        });
-    });
-    return deferred.promise;
 }
 
 function ensureDummyData(model, defaultValue)
