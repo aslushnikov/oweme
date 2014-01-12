@@ -8,13 +8,13 @@ block content
   h2 Loans:
   ul
     each val in userLoans
-      li= val.value + " to " + val.debtor.email + " for " + val.comment + " "
+      li= val.prettyValue() + " to " + val.debtor + " for " + val.comment + " "
         a(href="/loan/resolve/#{val.id}") Resolve
   h2 Debts:
   ul
     each val in userDebts
-      li= val.value + " to " + val.debtor.email + " for " + val.comment + " "
+      li= val.prettyValue() + " to " + val.debtor + " for " + val.comment + " "
   h2 History:
   ul
     each val in userHistory
-      li= val.value + " to " + val.debtor.email + " for " + val.comment + " "
+      li= val.debtor + " owes " + val.prettyValue() + " to " + val.lender + " for "  + val.comment

@@ -104,8 +104,8 @@ function ensureDummyLoans()
             currency: rubleCurrency,
             creationDate: new Date(),
             active: true,
-            lender: Server.users[0],
-            debtor: Server.users[1],
+            lender: Server.users[0].email,
+            debtor: Server.users[1].email,
         },
     ]);
 }
