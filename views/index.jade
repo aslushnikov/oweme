@@ -2,4 +2,7 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p Welcome to oWeMe!
+  p User: #{user.firstName} #{user.lastName}
+  p
+    a(href="/logout") Logout
