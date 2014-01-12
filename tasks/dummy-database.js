@@ -1,44 +1,47 @@
 var orm = require("orm");
 var Q = require("q");
-var config = require("./appConfig.js");
+var config = require("../lib/config.js");
 
 var connect = Q.denodeify(orm.connect.bind(orm));
 
 var Server = {};
 
-connect(config.database)
-.then(function(db) {
-    Server.db = db;
-})
-.then(loadModels)
-// ensuring DB has some dummy entries
-.then(ensureDummyCurrencies)
-.then(function(currencies) {
-    Server.currencies = currencies;
-})
-.then(ensureDummyUsers)
-.then(function(users) {
-    Server.users = users;
-})
-.then(ensureDummyCards)
-.then(function(cards) {
-    Server.cards = cards;
-})
-.then(ensureDummyLoans)
-.then(function() {
-    Server.db.close(function(err) {
-        if (err) throw err;
-        console.log("Dummies created!");
+module.exports = function()
+{
+    return connect(config.database)
+    .then(function(db) {
+        Server.db = db;
+    })
+    .then(loadModels)
+    // ensuring DB has some dummy entries
+    .then(ensureDummyCurrencies)
+    .then(function(currencies) {
+        Server.currencies = currencies;
+    })
+    .then(ensureDummyUsers)
+    .then(function(users) {
+        Server.users = users;
+    })
+    .then(ensureDummyCards)
+    .then(function(cards) {
+        Server.cards = cards;
+    })
+    .then(ensureDummyLoans)
+    .then(function() {
+        Server.db.close(function(err) {
+            if (err) throw err;
+            console.log("Dummies created!");
+        });
+    })
+    .fail(function(err) {
+        throw err;
     });
-})
-.fail(function(err) {
-    throw err;
-});
+}
 
 function loadModels()
 {
     var deferred = Q.defer();
-    Server.db.load("./lib/models", function(err) {
+    Server.db.load("../lib/models", function(err) {
         if (err) return deferred.reject(err);
 
         Server.db.sync(function(err) {
