@@ -16,14 +16,14 @@ block content
     | for
     input(type="text", name="comment", placeholder="nightclub")
     input(type="submit")
-  h2 Loans:
-  ul
-    each val in userLoans
-      li= val.prettyValue() + " to " + val.debtor + " for " + val.comment + " "
-        a(href="/loan/resolve/#{val.id}") Resolve
   h2 Debts:
   ul
     each val in userDebts
+      li= val.prettyValue() + " to " + val.lender + " for " + val.comment + " "
+        a(href="/loan/resolve/#{val.id}") Resolve
+  h2 Loans:
+  ul
+    each val in userLoans
       li= val.prettyValue() + " to " + val.debtor + " for " + val.comment + " "
         a(href="/loan/resolve/#{val.id}") Resolve
   h2 History:
