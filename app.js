@@ -3,22 +3,19 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
   , http = require('http')
   , path = require('path')
-  , config = require('./appConfig.js')
+  , config = require('./lib/config.js')
   , Q = require("q")
   , orm = require("orm")
-
-var app = express();
 
 var connect = Q.denodeify(orm.connect.bind(orm));
 
 connect(config.database)
-.then(loadModels)
-.then(setUpServer)
+.then(loadDatabaseModels)
+.then(setUpServer.bind(this, config))
 
-function loadModels(db)
+function loadDatabaseModels(db)
 {
     var deferred = Q.defer();
     db.load("./lib/models", function(err) {
@@ -31,9 +28,9 @@ function loadModels(db)
     return deferred.promise;
 }
 
-function setUpServer(database)
+function setUpServer(config, database)
 {
-    console.log("setting up server");
+    var app = express();
     // all environments
     app.set('port', process.env.PORT || 3000);
     app.set('views', __dirname + '/views');
@@ -46,21 +43,24 @@ function setUpServer(database)
     app.use(express.cookieSession({
         secret: "whatisyoursecret?!",
         cookie: {
+            // 6 months period
             maxAge: 1000 * 60 * 60 * 24 * 30 * 6,
         },
     }));
-    require("./lib/auth.js")(app, database, config);
+    // setting up authentication middleware
+    require("./lib/auth")(app, database, config);
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
 
     // development only
     if ('development' == app.get('env')) {
-      app.use(express.errorHandler());
+        app.use(express.errorHandler());
     }
 
+    // setting up all routes
     require("./lib/routes")(app, config, database);
 
     http.createServer(app).listen(app.get('port'), function(){
-      console.log('Express server listening on port ' + app.get('port'));
+        console.log('Express server listening on port ' + app.get('port'));
     });
 }
