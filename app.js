@@ -7,6 +7,7 @@ var express = require('express')
   , path = require('path')
   , Q = require("q")
   , database = require("./lib/database.js")
+  , config = require("./lib/config.js")
 
 database.connect()
 .then(setUpServer)
@@ -25,7 +26,7 @@ function setUpServer(database)
     app.use(express.methodOverride());
     app.use(express.cookieParser());
     app.use(express.cookieSession({
-        secret: "whatisyoursecret?!",
+        secret: config.auth.cookieSessionSecret,
         cookie: {
             // 6 months period
             maxAge: 1000 * 60 * 60 * 24 * 30 * 6,
