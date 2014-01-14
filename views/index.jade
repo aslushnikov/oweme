@@ -30,4 +30,7 @@ block content
   ul
     each val in userHistory
       li= val.debtor + " owes " + val.prettyValue() + " to " + val.lender + " for "  + val.comment
-
+  h2 Notifications:
+  ul
+    each val in userNotifications
+      li= "from: " + val.from + " to: " + val.to + " text: " + val.text
