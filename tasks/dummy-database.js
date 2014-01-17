@@ -78,6 +78,7 @@ function ensureDummyUsers()
             email: "aslushnikov@gmail.com",
             registrationDate: new Date(),
             loginDate: new Date(),
+            password: "T3sttest!",
         },
         {
             firstName: "Sedrak",
@@ -85,6 +86,7 @@ function ensureDummyUsers()
             email: "sedrak@kalashyan.com",
             registrationDate: new Date(),
             loginDate: new Date(),
+            password: "T3sttest!",
         }
     ]);
 }
