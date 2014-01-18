@@ -4,16 +4,21 @@ var gulp = require("gulp")
   , Q = require("q")
   , config = require("./lib/config.js")
 
-gulp.task("dummy-database", function() {
-    var dummyEntries = require("./tasks/dummy-database.js");
-    return dummyEntries();
+gulp.task("db/fill", function() {
+    var fill = require("./tasks/fill-database.js");
+    return fill();
 });
 
-gulp.task("clear-database", function() {
+gulp.task("db/drop", function() {
+    var dropDatabase = require("./tasks/drop-database.js");
+    return dropDatabase();
+});
+
+gulp.task("db/clear", function() {
     var clearDatabase = require("./tasks/clear-database.js");
     return clearDatabase();
 });
 
-gulp.task("reset-database", ["clear-database"], function() {
-    gulp.run("dummy-database");
+gulp.task("db/refill", ["db-drop"], function() {
+    gulp.run("db-fill");
 });
