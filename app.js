@@ -11,6 +11,9 @@ var express = require('express')
 
 database.connect()
 .then(setUpServer)
+.fail(function(err) {
+    throw err;
+});
 
 function setUpServer(database)
 {
