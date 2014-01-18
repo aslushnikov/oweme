@@ -12,7 +12,7 @@ var express = require('express')
 database.connect(config)
 .then(setUpServer)
 .fail(function(err) {
-    throw err;
+    console.log(err);
 });
 
 function setUpServer(database)
