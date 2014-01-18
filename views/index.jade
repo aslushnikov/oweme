@@ -4,7 +4,9 @@ block content
   h1= title
   p Welcome to oWeMe!
   p User: #{user.firstName} #{user.lastName} - #{user.email} 
-    a(href="/logout") Not you?
+    a(href="/user/edit") Edit
+  p
+    a(href="/logout") Logout
   h2 New loan/debt:
   form(method="POST", action="/loan/new")
     select(name="relation")
