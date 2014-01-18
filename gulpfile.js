@@ -2,7 +2,12 @@ var gulp = require("gulp")
   , gutil = require("gulp-util")
   , orm = require("orm")
   , Q = require("q")
-  , config = require("./config.js")
+  , config = require(process.env.OWEME_CONFIG || "./config.js")
+
+gulp.task("db/init", function() {
+    var init = require("./tasks/init-database.js");
+    return init(config);
+});
 
 gulp.task("db/fill", function() {
     var fill = require("./tasks/fill-database.js");
