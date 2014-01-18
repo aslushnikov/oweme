@@ -6,17 +6,17 @@ var gulp = require("gulp")
 
 gulp.task("db/fill", function() {
     var fill = require("./tasks/fill-database.js");
-    return fill();
+    return fill(config);
 });
 
 gulp.task("db/drop", function() {
     var dropDatabase = require("./tasks/drop-database.js");
-    return dropDatabase();
+    return dropDatabase(config);
 });
 
 gulp.task("db/clear", function() {
     var clearDatabase = require("./tasks/clear-database.js");
-    return clearDatabase();
+    return clearDatabase(config);
 });
 
 gulp.task("db/refill", ["db-drop"], function() {

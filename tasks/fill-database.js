@@ -4,9 +4,9 @@ var database = require("../lib/database.js")
 
 var Server = {};
 
-module.exports = function()
+module.exports = function(config)
 {
-    return database.connect()
+    return database.connect(config)
     .then(function(db) {
         Server.db = db;
     })

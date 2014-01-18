@@ -2,9 +2,9 @@ var orm = require("orm")
   , Q = require("q")
   , database = require("../lib/database.js")
 
-module.exports = function()
+module.exports = function(config)
 {
-    return database.connect()
+    return database.connect(config)
     // ensuring DB has some dummy entries
     .then(clearModels)
     .fail(function(err) {

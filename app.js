@@ -9,7 +9,7 @@ var express = require('express')
   , database = require("./lib/database.js")
   , config = require("./lib/config.js")
 
-database.connect()
+database.connect(config)
 .then(setUpServer)
 .fail(function(err) {
     throw err;
@@ -36,7 +36,7 @@ function setUpServer(database)
         },
     }));
     // setting up authentication middleware
-    require("./lib/auth")(app, database);
+    require("./lib/auth")(app, database, config);
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
 
