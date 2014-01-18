@@ -2,7 +2,7 @@ var gulp = require("gulp")
   , gutil = require("gulp-util")
   , orm = require("orm")
   , Q = require("q")
-  , config = require("./lib/config.js")
+  , config = require("./config.js")
 
 gulp.task("db/fill", function() {
     var fill = require("./tasks/fill-database.js");

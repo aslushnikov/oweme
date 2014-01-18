@@ -7,7 +7,7 @@ var express = require('express')
   , path = require('path')
   , Q = require("q")
   , database = require("./lib/database.js")
-  , config = require("./lib/config.js")
+  , config = require(process.env.OWEME_CONFIG || "./config.js")
 
 database.connect(config)
 .then(setUpServer)
