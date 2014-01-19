@@ -36,7 +36,7 @@ after(function (done) {
     .fail(done)
 });
 
-describe("Action", function() {
+describe("Actions", function() {
     beforeEach(function(done) {
         clearDatabase(config)
         .then(function() {
@@ -112,6 +112,25 @@ describe("Action", function() {
         })
         .then(function(editedUser) {
             editedUser.firstName.should.be.equal("Matvey");
+            done();
+        })
+        .fail(done);
+    });
+
+    it("should create new debt", function(done) {
+        actions.createNewUser(testUser)
+        .then(function(user) {
+            return actions.createNewLoan(user, {
+                relation: "owe",
+                email: "chattergirl@gmail.com",
+                value: "200",
+                comment: "nightclub"
+            });
+        })
+        .then(function(loan) {
+            loan.value.should.be.equal(200);
+            loan.lender.should.be.equal("chattergirl@gmail.com");
+            loan.debtor.should.be.equal(testUser.email);
             done();
         })
         .fail(done);
