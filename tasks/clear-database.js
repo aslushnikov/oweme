@@ -19,9 +19,6 @@ function clearModels(db)
         var model = db.models[modelName];
         var clear = Q.denodeify(model.clear.bind(model));
         var promise = clear()
-        .then(function(modelName) {
-            console.log("Model " + modelName + " successfully cleared.");
-        }.bind(this, modelName))
         .fail(function(modelName, error) {
             console.error("Failed to clear model " + modelName);
             throw error;
@@ -29,9 +26,6 @@ function clearModels(db)
         clearPromises.push(promise);
     }
     Q.all(clearPromises)
-    .then(function() {
-        console.log("Database cleared.");
-    })
     .fail(function(error) {
         console.error("Failed to clear database");
         throw error;

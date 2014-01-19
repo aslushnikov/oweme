@@ -27,7 +27,6 @@ function ensureDummyData(model, defaultValue)
 
 function ensureDummyCurrencies(db)
 {
-    console.log("ensuring dummy currencies...");
     return ensureDummyData(db.models.currency, [
         {
             name: "none",

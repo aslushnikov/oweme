@@ -23,7 +23,6 @@ module.exports = function(config)
     .then(function() {
         Server.db.close(function(err) {
             if (err) throw err;
-            console.log("Dummies created!");
         });
     })
     .fail(function(err) {
@@ -47,7 +46,6 @@ function ensureDummyData(model, defaultValue)
 
 function ensureDummyCurrencies()
 {
-    console.log("ensuring dummy currencies...");
     return ensureDummyData(Server.db.models.currency, [
         {
             name: "none",
@@ -70,7 +68,6 @@ function ensureDummyCurrencies()
 
 function ensureDummyUsers()
 {
-    console.log("ensuring dummy users...");
     return ensureDummyData(Server.db.models.user, [
         {
             firstName: "Andrey",
