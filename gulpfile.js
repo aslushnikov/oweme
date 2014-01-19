@@ -1,17 +1,19 @@
 var gulp = require("gulp")
   , gutil = require("gulp-util")
   , orm = require("orm")
+  , database = require("./lib/database")
   , Q = require("q")
   , config = require(process.env.OWEME_CONFIG || "./config.js")
+  , dbTasks = require("./tasks/db-tasks")
 
-gulp.task("db/init", function() {
-    var init = require("./tasks/init-database.js");
-    return init(config);
-});
-
-gulp.task("db/fill", function() {
-    var fill = require("./tasks/fill-database.js");
-    return fill(config);
+gulp.task("db/reset", function() {
+    return database.connect(config)
+    .then(function(db) {
+        return dbTasks.reset(db);
+    })
+    .then(function(db) {
+        return Q.denodeify(db.close.bind(db))();
+    })
 });
 
 gulp.task("db/drop", function() {
@@ -24,6 +26,8 @@ gulp.task("db/clear", function() {
     return clearDatabase(config);
 });
 
-gulp.task("db/refill", ["db-drop"], function() {
-    gulp.run("db-fill");
+gulp.task("db/fill", function() {
+    var fill = require("./tasks/fill-database.js");
+    return fill(config);
 });
+

@@ -3,9 +3,7 @@ var Q = require("q")
   , database = require("../lib/database")
   , Actions = require("../lib/actions")
   , config = require("./testConfig")
-  , initDatabase = require("../tasks/init-database")
-  , dropDatabase = require("../tasks/drop-database")
-  , clearDatabase = require("../tasks/clear-database")
+  , dbTasks = require("../tasks/db-tasks")
 
 var db = null;
 var actions = null;
@@ -36,25 +34,26 @@ before(function (done) {
         db = database;
         actions = new Actions(db);
     })
-    .then(initDatabase.bind(null, config))
+    .then(function() {
+        dbTasks.init(db);
+    })
     .then(done)
     .fail(done)
 });
 
 after(function (done) {
     // drop database tables
-    Q.denodeify(db.close.bind(db))()
-    .then(dropDatabase.bind(null, config))
+    dbTasks.drop(db)
+    .then(function(db) {
+        return Q.denodeify(db.close.bind(db))();
+    })
     .then(done)
     .fail(done)
 });
 
 describe("Actions", function() {
-    beforeEach(function(done) {
-        clearDatabase(config)
-        .then(function() {
-            return initDatabase(config);
-        })
+    afterEach(function(done) {
+        dbTasks.reset(db)
         .then(function() {
             done();
         })
