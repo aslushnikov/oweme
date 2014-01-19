@@ -103,12 +103,11 @@ describe("Action", function() {
         })
     });
 
-    it("should allow user edit with password change", function(done) {
+    it("should allow user edit without password change", function(done) {
         actions.createNewUser(testUser)
         .then(function(user) {
             return actions.editUser(user, {
                 firstName: "Matvey",
-                password: "bitch"
             });
         })
         .then(function(editedUser) {
