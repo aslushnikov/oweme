@@ -16,6 +16,13 @@ var testUser = {
     password: "callmemaybe",
 };
 
+var testLoan = {
+    relation: "owe",
+    email: "chattergirl@gmail.com",
+    value: 200,
+    comment: "nightclub"
+};
+
 before(function (done) {
     // connect to db and initialize
     database.connect(config)
@@ -120,17 +127,30 @@ describe("Actions", function() {
     it("should create new debt", function(done) {
         actions.createNewUser(testUser)
         .then(function(user) {
-            return actions.createNewLoan(user, {
-                relation: "owe",
-                email: "chattergirl@gmail.com",
-                value: "200",
-                comment: "nightclub"
-            });
+            return actions.createNewLoan(user, testLoan);
         })
         .then(function(loan) {
-            loan.value.should.be.equal(200);
-            loan.lender.should.be.equal("chattergirl@gmail.com");
+            loan.value.should.be.equal(testLoan.value);
+            loan.lender.should.be.equal(testLoan.email);
             loan.debtor.should.be.equal(testUser.email);
+            loan.active.should.be.true;
+            done();
+        })
+        .fail(done);
+    });
+
+    it("should resolve user debt", function(done) {
+        var user;
+        actions.createNewUser(testUser)
+        .then(function(u) {
+            user = u;
+            return actions.createNewLoan(user, testLoan);
+        })
+        .then(function(loan) {
+            return actions.resolveUserLoanWithId(user, loan.id)
+        })
+        .then(function(loan) {
+            loan.active.should.be.false;
             done();
         })
         .fail(done);
