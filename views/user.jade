@@ -4,13 +4,13 @@ block content
   form(method="POST", action="#{method}")
     div
       label Email:
-      input(type="email", name="email", placeholder="example@gmail.com", value="#{email}")
+      input(type="email", name="email", placeholder="example@gmail.com", value="#{email || ''}")
     div
       label First Name:
-      input(type="text", name="firstName", placeholder="Andrey", value="#{firstName}")
+      input(type="text", name="firstName", placeholder="Andrey", value="#{firstName || ''}")
     div
       label Last Name:
-      input(type="text", name="lastName", placeholder="Programmer", value="#{lastName}")
+      input(type="text", name="lastName", placeholder="Programmer", value="#{lastName || ''}")
     div
       label Password:
       input(type="password", name="password", placeholder="mypassword")
