@@ -8,6 +8,7 @@ var express = require('express')
   , Q = require("q")
   , database = require("./lib/database.js")
   , config = require(process.env.OWEME_CONFIG || "./config.js")
+  , EventEmitter = require("events").EventEmitter
 
 database.connect(config)
 .then(setUpServer)
@@ -17,6 +18,7 @@ database.connect(config)
 
 function setUpServer(database)
 {
+    var eventBus = new EventEmitter();
     var app = express();
     // all environments
     app.set('port', process.env.PORT || 3000);
@@ -46,7 +48,7 @@ function setUpServer(database)
     }
 
     // setting up all routes
-    require("./lib/routes")(app, database);
+    require("./lib/routes")(app, database, eventBus);
 
     http.createServer(app).listen(app.get('port'), function(){
         console.log('Express server listening on port ' + app.get('port'));
