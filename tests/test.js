@@ -4,7 +4,9 @@ var Q = require("q")
   , Actions = require("../lib/actions")
   , config = require("./testConfig")
   , dbTasks = require("../tasks/db-tasks")
+  , EventEmitter = require("events").EventEmitter;
 
+var eventBus = new EventEmitter();
 var db = null;
 var actions = null;
 var testUser1 = {
@@ -32,7 +34,7 @@ before(function (done) {
     database.connect(config)
     .then(function(database) {
         db = database;
-        actions = new Actions(db);
+        actions = new Actions(db, eventBus);
     })
     .then(function() {
         dbTasks.init(db);
@@ -207,6 +209,40 @@ describe("Actions", function() {
             notifs[1].from.should.be.equal(testUser2.email);
             notifs[1].to.should.be.equal(testUser1.email);
             done();
+        })
+        .fail(done);
+    });
+
+    it("should emit event with notification for new debt", function(done) {
+        eventBus.once("notification", function(notification) {
+            notification.from.should.be.equal(testUser1.email);
+            notification.to.should.be.equal(testUser2.email);
+            done();
+        });
+        actions.createNewUser(testUser1)
+        .then(function(user) {
+            return actions.createNewLoan(user, testLoan);
+        })
+        .fail(done);
+    });
+
+    it("should emit event with notification for resolved debt", function(done) {
+        var loan;
+        actions.createNewUser(testUser1)
+        .then(function(user) {
+            return actions.createNewLoan(user, testLoan);
+        })
+        .then(function(l) {
+            loan = l;
+            return actions.createNewUser(testUser2)
+        })
+        .then(function(user) {
+            eventBus.once("notification", function(notification) {
+                notification.from.should.be.equal(testUser2.email);
+                notification.to.should.be.equal(testUser1.email);
+                done();
+            });
+            actions.resolveUserLoanWithId(user, loan.id);
         })
         .fail(done);
     });
