@@ -6,8 +6,9 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , Q = require("q")
-  , database = require("./lib/database.js")
+  , database = require("./lib/database")
   , config = require(process.env.OWEME_CONFIG || "./config.js")
+  , Actions = require("./lib/actions")
   , EventEmitter = require("events").EventEmitter
 
 database.connect(config)
@@ -20,6 +21,7 @@ function setUpServer(database)
 {
     var eventBus = new EventEmitter();
     var app = express();
+    var actions = new Actions(database, eventBus, config);
     // all environments
     app.set('port', process.env.PORT || 3000);
     app.set('views', __dirname + '/views');
@@ -38,7 +40,7 @@ function setUpServer(database)
         },
     }));
     // setting up authentication middleware
-    require("./lib/auth")(app, database, eventBus, config);
+    require("./lib/auth")(app, actions, config);
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
 
@@ -48,7 +50,7 @@ function setUpServer(database)
     }
 
     // setting up all routes
-    require("./lib/routes")(app, database, eventBus, config);
+    require("./lib/routes")(app, actions, config);
 
     http.createServer(app).listen(app.get('port'), function(){
         console.log('Express server listening on port ' + app.get('port'));
