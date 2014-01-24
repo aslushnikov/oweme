@@ -17,4 +17,9 @@ module.exports = {
         realm: "http://localhost:3000",
         cookieSessionSecret: "whatismysecret?!",
     },
+    registration: {
+        // if the user didn't fill in his password in an hour after
+        // auto-registration, then it will be removed
+        inactiveUserDropTimeout: 1000 * 60 * 60, // 1 hour
+    }
 };
