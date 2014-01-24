@@ -66,7 +66,6 @@ describe("Action", function() {
         })
         .fail(done)
     })
-
     /**
      * Actions.createNewUser
      */
@@ -206,6 +205,32 @@ describe("Action", function() {
             })
             .fail(done)
         });
+    });
+
+    /**
+     * Actions.getUserById
+     */
+    describe("getUserById", function() {
+        it("should return user if id is correct", function(done) {
+            actions.createNewUser(testUser1)
+            .then(function(user) {
+                return actions.getUserById(user.id);
+            })
+            .then(function(user) {
+                user.email.should.be.equal(testUser1.email);
+                done();
+            })
+            .fail(done);
+        });
+        it("should not return unexisting user", function(done) {
+            actions.getUserById(1)
+            .then(function(user) {
+                done(new Error("Some user was returned, also it should not"));
+            })
+            .fail(function(err) {
+                done();
+            })
+        })
     });
 
 
