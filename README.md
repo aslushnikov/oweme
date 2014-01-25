@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/aslushnikov/oweme.png?branch=master)](https://travis-ci.org/aslushnikov/oweme)
+
 # WIP
 
 ## MySQL setup
