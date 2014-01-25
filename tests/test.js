@@ -22,7 +22,7 @@ var testUser2 = {
     password: "tasteslikepepsicola",
 };
 
-var testLoan = {
+var testDebt = {
     relation: "owe",
     email: testUser2.email,
     value: 200,
@@ -241,11 +241,11 @@ describe("Action", function() {
         it("should create new debt", function(done) {
             actions.createNewUser(testUser1)
             .then(function(user) {
-                return actions.createNewDebt(user, testLoan);
+                return actions.createNewDebt(user, testDebt);
             })
             .then(function(loan) {
-                loan.value.should.be.equal(testLoan.value);
-                loan.lender.should.be.equal(testLoan.email);
+                loan.value.should.be.equal(testDebt.value);
+                loan.lender.should.be.equal(testDebt.email);
                 loan.debtor.should.be.equal(testUser1.email);
                 loan.active.should.be.true;
                 done();
@@ -258,7 +258,7 @@ describe("Action", function() {
             actions.createNewUser(testUser1)
             .then(function(u) {
                 user = u;
-                return actions.createNewDebt(user, testLoan);
+                return actions.createNewDebt(user, testDebt);
             })
             .then(function(loan) {
                 return actions.resolveUserDebtWithId(user, loan.id)
@@ -277,7 +277,7 @@ describe("Action", function() {
             actions.createNewUser(testUser1)
             .then(function(u) {
                 user = u;
-                return actions.createNewDebt(user, testLoan);
+                return actions.createNewDebt(user, testDebt);
             })
             // create debt
             .then(function(l) {
@@ -328,7 +328,7 @@ describe("Action", function() {
             });
             actions.createNewUser(testUser1)
             .then(function(user) {
-                return actions.createNewDebt(user, testLoan);
+                return actions.createNewDebt(user, testDebt);
             })
             .fail(done);
         });
@@ -337,7 +337,7 @@ describe("Action", function() {
             var loan;
             actions.createNewUser(testUser1)
             .then(function(user) {
-                return actions.createNewDebt(user, testLoan);
+                return actions.createNewDebt(user, testDebt);
             })
             .then(function(l) {
                 loan = l;
