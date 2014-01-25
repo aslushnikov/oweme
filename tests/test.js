@@ -235,13 +235,13 @@ describe("Action", function() {
 
 
     /**
-     * Actions.createNewLoan
+     * Actions.createNewDebt
      */
-    describe("createNewLoan", function() {
+    describe("createNewDebt", function() {
         it("should create new debt", function(done) {
             actions.createNewUser(testUser1)
             .then(function(user) {
-                return actions.createNewLoan(user, testLoan);
+                return actions.createNewDebt(user, testLoan);
             })
             .then(function(loan) {
                 loan.value.should.be.equal(testLoan.value);
@@ -258,7 +258,7 @@ describe("Action", function() {
             actions.createNewUser(testUser1)
             .then(function(u) {
                 user = u;
-                return actions.createNewLoan(user, testLoan);
+                return actions.createNewDebt(user, testLoan);
             })
             .then(function(loan) {
                 return actions.resolveUserDebtWithId(user, loan.id)
@@ -277,7 +277,7 @@ describe("Action", function() {
             actions.createNewUser(testUser1)
             .then(function(u) {
                 user = u;
-                return actions.createNewLoan(user, testLoan);
+                return actions.createNewDebt(user, testLoan);
             })
             // create debt
             .then(function(l) {
@@ -328,7 +328,7 @@ describe("Action", function() {
             });
             actions.createNewUser(testUser1)
             .then(function(user) {
-                return actions.createNewLoan(user, testLoan);
+                return actions.createNewDebt(user, testLoan);
             })
             .fail(done);
         });
@@ -337,7 +337,7 @@ describe("Action", function() {
             var loan;
             actions.createNewUser(testUser1)
             .then(function(user) {
-                return actions.createNewLoan(user, testLoan);
+                return actions.createNewDebt(user, testLoan);
             })
             .then(function(l) {
                 loan = l;
