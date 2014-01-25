@@ -1,8 +1,6 @@
 language: node_js
 node_js:
-  - "0.11"
   - "0.10"
   - "0.8"
-  - "0.6"
 before_script:
-  - mysql -u root -e 'UPDATE user SET password=PASSWORD("testpass") WHERE user="root";\nFLUSH PRIVILEGES;\ncreate database oweme_test;'
+  - mysql -u root -e 'UPDATE mysql.user SET password=PASSWORD("testpass") WHERE user="root";\nFLUSH PRIVILEGES;\ncreate database oweme_test;'
