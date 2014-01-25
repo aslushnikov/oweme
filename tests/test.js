@@ -261,7 +261,7 @@ describe("Action", function() {
                 return actions.createNewLoan(user, testLoan);
             })
             .then(function(loan) {
-                return actions.resolveUserLoanWithId(user, loan.id)
+                return actions.resolveUserDebtWithId(user, loan.id)
             })
             .then(function(loan) {
                 loan.active.should.be.false;
@@ -299,7 +299,7 @@ describe("Action", function() {
             })
             // resolve notifications as the second user
             .then(function() {
-                return actions.resolveUserLoanWithId(user2, loan.id);
+                return actions.resolveUserDebtWithId(user2, loan.id);
             })
             .then(function(loan) {
                 var Notification = db.models.notification;
@@ -349,7 +349,7 @@ describe("Action", function() {
                     notification.to.should.be.equal(testUser1.email);
                     done();
                 });
-                actions.resolveUserLoanWithId(user, loan.id);
+                actions.resolveUserDebtWithId(user, loan.id);
             })
             .fail(done);
         });
