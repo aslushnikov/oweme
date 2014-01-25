@@ -19,7 +19,7 @@ module.exports = function(config)
     .then(function(users) {
         Server.users = users;
     })
-    .then(ensureDummyLoans)
+    .then(ensureDummyDebts)
     .then(function() {
         Server.db.close(function(err) {
             if (err) throw err;
@@ -88,7 +88,7 @@ function ensureDummyUsers()
     ]);
 }
 
-function ensureDummyLoans()
+function ensureDummyDebts()
 {
     var rubleCurrency = null;
     for (var i = 0; i < Server.currencies.length; ++i) {
