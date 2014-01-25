@@ -4,3 +4,6 @@ node_js:
   - "0.8"
 before_script:
   - mysql -u root -e 'UPDATE mysql.user SET password=PASSWORD("testpass") WHERE user="root";\nFLUSH PRIVILEGES;\ncreate database oweme_test;'
+notifications:
+  email:
+    - aslushnikov@gmail.com
